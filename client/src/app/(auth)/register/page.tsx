@@ -17,6 +17,7 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
+    defaultValues: { email: '', password: '' },
   });
 
   const registerMutation = useRegister();
@@ -79,4 +80,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

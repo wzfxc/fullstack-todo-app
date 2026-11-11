@@ -1,26 +1,43 @@
 import { z } from 'zod';
 
 export const loginSchema = z.object({
-  email: z.string().email({ message: 'Invalid email format' }),
-  password: z.string().min(1, { message: 'Password is required' }),
+  email: z.string().trim().email({ message: 'Invalid email format' }),
+  password: z.string().trim().min(1, { message: 'Password is required' }),
 });
 
 export const registerSchema = z.object({
-  email: z.string().email({ message: 'Invalid email format' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  email: z.string().trim().email({ message: 'Invalid email format' }),
+  password: z.string().trim().min(6, { message: 'Password must be at least 6 characters' }),
 });
 
 const taskStatusEnum = z.enum(['todo', 'in progress', 'done']);
 
 export const createTaskSchema = z.object({
-  title: z.string().min(1, { message: 'Title must not be empty' }),
-  description: z.string().optional(),
+  title: z
+    .string()
+    .trim()
+    .min(1, { message: 'Title must not be empty' })
+    .max(255, { message: 'Maximum length is 255 characters' }),
+  description: z
+    .string()
+    .trim()
+    .max(255, { message: 'Maximum length is 255 characters' })
+    .optional(),
   status: taskStatusEnum.default('todo'),
 });
 
 export const updateTaskSchema = z.object({
-  title: z.string().min(1, { message: 'Title must not be empty' }).optional(),
-  description: z.string().optional(),
+  title: z
+    .string()
+    .trim()
+    .min(1, { message: 'Title must not be empty' })
+    .max(255, { message: 'Maximum length is 255 characters' })
+    .optional(),
+  description: z
+    .string()
+    .trim()
+    .max(255, { message: 'Maximum length is 255 characters' })
+    .optional(),
   status: taskStatusEnum.optional(),
 });
 

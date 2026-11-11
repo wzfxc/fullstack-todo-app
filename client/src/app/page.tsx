@@ -11,14 +11,25 @@ import TaskForm from '@/components/TaskForm';
 import TaskFilters from '@/components/TaskFilters';
 import Button from '@/components/ui/Button';
 
+const VALID_STATUSES: TaskStatus[] = ['todo', 'in progress', 'done'];
+
 function Dashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const statusParam = searchParams.get('status') as TaskStatus | null;
+  const statusParam = searchParams.get('status');
+
+  const activeStatus: TaskStatus | null =
+    statusParam && statusParam !== 'all' && VALID_STATUSES.includes(statusParam as TaskStatus)
+      ? (statusParam as TaskStatus)
+      : null;
 
   const { data: user, isLoading: authLoading, isError: authError } = useMe();
-  const { data: tasks, isLoading: tasksLoading } = useGetTasks(statusParam);
+  const { data: allTasks, isLoading: tasksLoading } = useGetTasks();
   const logout = useLogout();
+
+  const tasks = activeStatus
+    ? (allTasks ?? []).filter((task) => task.status === activeStatus)
+    : allTasks;
 
   useEffect(() => {
     if (!authLoading && authError) {
@@ -64,7 +75,7 @@ function Dashboard() {
           <h1 className="text-2xl font-bold text-gray-900">My Tasks</h1>
           <p className="text-sm text-gray-500">
             {tasks?.length ?? 0} task{tasks?.length !== 1 ? 's' : ''}
-            {statusParam ? ` · ${statusParam}` : ''}
+            {activeStatus ? ` · ${activeStatus}` : ''}
           </p>
         </div>
 

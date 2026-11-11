@@ -17,6 +17,7 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    defaultValues: { email: '', password: '' },
   });
 
   const login = useLogin();
@@ -79,4 +80,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

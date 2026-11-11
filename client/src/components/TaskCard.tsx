@@ -44,12 +44,14 @@ export default function TaskCard({ task }: TaskCardProps) {
   const cfg = statusConfig[task.status];
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <h3 className="truncate font-medium text-gray-900">{task.title}</h3>
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex min-w-0 items-start justify-between gap-3">
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <h3 className="break-all whitespace-normal font-medium text-gray-900">{task.title}</h3>
           {task.description && (
-            <p className="mt-1 text-sm text-gray-500 line-clamp-2">{task.description}</p>
+            <p className="mt-1 line-clamp-2 break-all whitespace-normal text-sm text-gray-500">
+              {task.description}
+            </p>
           )}
         </div>
         <Button
@@ -91,4 +93,3 @@ export default function TaskCard({ task }: TaskCardProps) {
     </div>
   );
 }
-
