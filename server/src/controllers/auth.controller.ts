@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
 import { RegisterInput, LoginInput } from '../schemas/auth.schema';
+import { AuthenticatedRequest } from '../types';
 
 const SALT_ROUNDS = 12;
 const COOKIE_OPTIONS = {
@@ -70,4 +71,9 @@ export const logout = (_req: Request, res: Response): void => {
     sameSite: 'strict' as const,
   });
   res.status(200).json({ status: 'success', message: 'Logged out successfully' });
+};
+
+export const me = (req: Request, res: Response): void => {
+  const user = (req as AuthenticatedRequest).user;
+  res.status(200).json({ status: 'success', data: { id: user.id, email: user.email } });
 };
