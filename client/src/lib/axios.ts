@@ -13,10 +13,16 @@ api.interceptors.response.use(
   (response) => response,
   (error: unknown) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      const queryClient = getQueryClient();
-      queryClient.clear();
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
+      const isAuthRoute =
+        error.config?.url?.includes('/auth/login') ||
+        error.config?.url?.includes('/auth/register');
+
+      if (!isAuthRoute) {
+        const queryClient = getQueryClient();
+        queryClient.clear();
+        if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);
@@ -24,4 +30,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-
